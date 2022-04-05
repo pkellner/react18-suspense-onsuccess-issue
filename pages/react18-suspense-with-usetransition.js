@@ -108,16 +108,16 @@ export default function IndexPage() {
             setSelectedCityIdTemp={setSelectedCityIdTemp}
           />
         </div>
-        {/*<div className="col-9">*/}
-        {/*  <div>*/}
-        {/*    <b>CITY DETAIL (TOP ROW SELECTED AUTOMATICALLY)</b>*/}
-        {/*    <hr />*/}
-        {/*    <CityDetail*/}
-        {/*      selectedCityId={selectedCityId}*/}
-        {/*      selectedCityIdTemp={selectedCityIdTemp}*/}
-        {/*    />*/}
-        {/*  </div>*/}
-        {/*</div>*/}
+        <div className="col-9">
+          <div>
+            <b>CITY DETAIL (TOP ROW SELECTED AUTOMATICALLY)</b>
+            <hr />
+            <CityDetail
+              selectedCityId={selectedCityId}
+              selectedCityIdTemp={selectedCityIdTemp}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

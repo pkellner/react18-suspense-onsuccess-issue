@@ -1,0 +1,17 @@
+{
+  "name": "react18suspenseissue",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start",
+    "post-update": "yarn upgrade --latest"
+  },
+  "dependencies": {
+    "next": "^12.1.4",
+    "react": "^18.1.0-next-fc47cb1b6-20220404",
+    "react-dom": "^18.1.0-next-fc47cb1b6-20220404",
+    "swr": "^1.2.2"
+  },
+  "description": "Sample Application by Peter Kellner to show Suspense issue"
+}
