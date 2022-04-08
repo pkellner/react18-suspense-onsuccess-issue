@@ -5,7 +5,6 @@ const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
 function Profile() {
   const { data } = useSWR(
-    //"/api/city",
     "https://airquality.peterkellner.net/api/data/temperatureCurrentCity?cityId=5",
     fetcher,
     { suspense: true }

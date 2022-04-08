@@ -1,25 +1,28 @@
 import { useEffect, useState } from "react";
-import useSwr from "swr";
-
-const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
 function CityDetailFallback() {
   return <div>Loading (CityDetail)</div>;
 }
 
 function CityDetail({ selectedCityId }) {
-  const { data: city } = useSwr(
-    selectedCityId
-      ? `https://airquality.peterkellner.net/api/data/pm25CurrentCityLastHours?cityId=${selectedCityId}`
-      : null,
-    fetcher,
-    {
-      suspense: false,
-      onSuccess: (data, key, config) => {},
+  const [city, setCity] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    async function fetchItemJSON() {
+      setIsLoading(true);
+      const response = await fetch(
+        `/api/city/${selectedCityId}`
+      );
+      setIsLoading(false);
+      const city = await response.json();
+      setCity(city);
     }
-  );
+    if (selectedCityId) {
+      fetchItemJSON();
+    }
+  }, [selectedCityId]);
 
-  return !city ? (
+  return isLoading ? (
     <CityDetailFallback />
   ) : (
     <div className="row">
@@ -35,22 +38,29 @@ function CityListFallback() {
 }
 
 function CityList({ setSelectedCityId }) {
-  const { data: cities } = useSwr(
-    "https://airquality.peterkellner.net/api/data/cities?count=3",
-    fetcher,
-    {
-      suspense: false,
-      onSuccess: (data) => {
-        setSelectedCityId(data[0].id);
-      },
-    }
-  );
+  const [cities, setCities] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  return !cities ? (
+  useEffect(() => {
+    async function fetchItemsJSON() {
+      setIsLoading(true);
+      setSelectedCityId(undefined);
+      const response = await fetch(
+        "/api/city"
+      );
+      const cities = await response.json();
+      setIsLoading(false);
+      setCities(cities);
+      setSelectedCityId(cities[0].id);
+    }
+    fetchItemsJSON();
+  }, []);
+
+  return isLoading ? (
     <CityListFallback />
   ) : (
     <div className="col-3">
-      {cities?.map((city) => {
+      {cities.map((city) => {
         return (
           <div key={city.id}>
             <button
@@ -71,19 +81,19 @@ export default function IndexPage() {
   const [selectedCityId, setSelectedCityId] = useState();
   return (
     <div className="container">
-      <a href="/">Site Root</a>
-      <hr />
+      <a href="/">Site Root</a><hr/>
       <div className="row">
         <div className="col-3">
           <b>CITY LIST</b>
           <hr />
           <CityList
+            selectedCityId={selectedCityId}
             setSelectedCityId={setSelectedCityId}
           />
         </div>
         <div className="col-9">
           <div>
-            <b>CITY DETAIL (TOP ROW SELECTED AUTOMATICALLY)</b>
+            <b>CITY DETAIL (TOP ROW SELECTED AUTOMATICALLY) {selectedCityId}</b>
             <hr />
             <CityDetail selectedCityId={selectedCityId} />
           </div>

@@ -1,3 +1,7 @@
+// $$$ THIS DOES NOT LOAD THE DETAIL PAGE AS EXPECTED, AS THERE IS NO ONSUCCESS EVENT TO MAKE IT LOAD
+//     HOWEVER, THERE IS ANOTHER ISSUE, UNRELATED TO ONSUCCESS THAT THIS PAGES CAUSES AN ODD HTML MISMATCH RENERING PROBLEM
+//     I CREATED AN ISSUE ON SWR REPO HERE: https://github.com/vercel/swr/issues/1905
+
 import { Suspense, useEffect, useState } from "react";
 import useSwr from "swr";
 
@@ -11,7 +15,7 @@ function CityDetail({ selectedCityId }) {
   function CityDetailUI({ selectedCityId }) {
     const { data: city } = useSwr(
       selectedCityId
-        ? `https://airquality.peterkellner.net/api/data/pm25CurrentCityLastHours?cityId=${selectedCityId}`
+        ? `/api/city/${selectedCityId}`
         : null,
       fetcher,
       {
@@ -41,7 +45,7 @@ function CityListFallback() {
 function CityList({ setSelectedCityIdFn }) {
   function CityListUI({ setSelectedCityIdFn }) {
     const { data: cities } = useSwr(
-      "https://airquality.peterkellner.net/api/data/cities?count=3",
+      "/api/city",
       fetcher,
       {
         suspense: true,
@@ -96,13 +100,13 @@ export default function IndexPage() {
             }}
           />
         </div>
-        <div className="col-9">
-          <div>
-            <b>CITY DETAIL (TOP ROW SELECTED AUTOMATICALLY)</b>
-            <hr />
-            <CityDetail selectedCityId={selectedCityId} />
-          </div>
-        </div>
+        {/*<div className="col-9">*/}
+        {/*  <div>*/}
+        {/*    <b>CITY DETAIL (TOP ROW SELECTED AUTOMATICALLY)</b>*/}
+        {/*    <hr />*/}
+        {/*    <CityDetail selectedCityId={selectedCityId} />*/}
+        {/*  </div>*/}
+        {/*</div>*/}
       </div>
     </div>
   );
